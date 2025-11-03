@@ -4,6 +4,8 @@ import Form, { type LogbookInputs } from "@/components/Form";
 import Output from "@/components/Output";
 import { loadJSON, saveJSON, debounce } from "@/lib/storage";
 import { motion } from "framer-motion";
+import { Analytics } from "@vercel/analytics/next";
+
 
 export default function Home() {
   const [generated, setGenerated] = useState<string>("");
@@ -85,29 +87,32 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen items-start justify-center bg-zinc-50 p-6 font-sans dark:bg-black">
-      <main className="mx-auto w-full max-w-3xl space-y-8">
-        <header className="space-y-1">
-          <motion.h1 initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-            Logbook
-          </motion.h1>
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">Generate a professional, top 1% logbook entry from your details.</p>
-        </header>
-        <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-black">
-          <Form onGenerate={onGenerate} loading={loading} />
-        </section>
-        {generated && (
+    <>
+      <Analytics/>
+      <div className="flex min-h-screen items-start justify-center bg-zinc-50 p-6 font-sans dark:bg-black">
+        <main className="mx-auto w-full max-w-3xl space-y-8">
+          <header className="space-y-1">
+            <motion.h1 initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
+              Logbook
+            </motion.h1>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">Generate a professional, top 1% logbook entry from your details.</p>
+          </header>
           <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-black">
-            <Output 
-              value={generated} 
-              onChange={setGenerated}
-              imageUrl={imageUrl}
-              onGenerateImage={onGenerateImage}
-              isGeneratingImage={generatingImage}
-            />
+            <Form onGenerate={onGenerate} loading={loading} />
           </section>
-        )}
-      </main>
-    </div>
+          {generated && (
+            <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-black">
+              <Output 
+                value={generated} 
+                onChange={setGenerated}
+                imageUrl={imageUrl}
+                onGenerateImage={onGenerateImage}
+                isGeneratingImage={generatingImage}
+              />
+            </section>
+          )}
+        </main>
+      </div>
+    </>
   );
 }
